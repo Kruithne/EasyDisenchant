@@ -1,1 +1,3 @@
--- ToDo: Make this add-on.
+-- ToDo: Check for loading of Blizzard_TradeSkillUI for button input.
+-- ToDo: Add command to open interface.
+-- ToDo: Design the interface.
