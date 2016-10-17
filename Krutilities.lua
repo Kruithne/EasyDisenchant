@@ -14,16 +14,20 @@ do
 	-- [[ Local Functions ]] --
 	local Shared_ProcessPoints = function(target, points, parent)
 		if points then
-			if #points == 0 then
-				-- Single point.
-				points.point = points.point or "CENTER";
-				target:SetPoint(points.point, points.relativeTo or parent, points.relativePoint or points.point, points.x or 0, points.y or 0);
+			if type(points) == "string" then
+				target:SetPoint(points, parent, points, 0, 0);
 			else
-				-- Many points
-				for i = 1, #points do
-					local point = points[i];
-					point.point = point.point or "CENTER";
-					target:SetPoint(point.point, point.relativeTo or parent, point.relativePoint or point.point, point.x or 0, point.y or 0);
+				if #points == 0 then
+					-- Single point.
+					points.point = points.point or "CENTER";
+					target:SetPoint(points.point, points.relativeTo or parent, points.relativePoint or points.point, points.x or 0, points.y or 0);
+				else
+					-- Many points
+					for i = 1, #points do
+						local point = points[i];
+						point.point = point.point or "CENTER";
+						target:SetPoint(point.point, point.relativeTo or parent, point.relativePoint or point.point, point.x or 0, point.y or 0);
+					end
 				end
 			end
 		end
@@ -45,6 +49,14 @@ do
 
 		if width then target:SetWidth(width); end
 		if height then target:SetHeight(height); end
+	end
+
+	local Shared_Mixin = function(target, mixin)
+		if mixin then
+			for key, value in pairs(mixin) do
+				target[key] = value;
+			end
+		end
 	end
 
 	local Shared_Inject = function(target, parent, injectSelf)
@@ -139,6 +151,7 @@ do
 
 	_M.Frame = function(self, node)
 		assert(type(node) == "table", "Krutilities:Frame called with invalid constructor table.");
+		Shared_Mixin(node, node.mixin);
 
 		if self ~= _M then
 			node.parent = self;
@@ -157,9 +170,8 @@ do
 
 		local frame = CreateFrame(node.type or "FRAME", node.name, node.parent, node.inherit);
 
-		if node.hidden then
-			frame:Hide();
-		end
+		if node.hidden then frame:Hide(); end
+		if node.enableMouse then frame:EnableMouse(); end
 
 		if node.strata then
 			frame:SetFrameStrata(node.strata);
@@ -170,9 +182,9 @@ do
 		Shared_Inject(frame, node.parent, node.injectSelf);
 
 		-- Anchor points
+		if node.setAllPoints then frame:SetAllPoints(true); end
 		if node.points == nil then node.points = { point = "CENTER" }; end
 		Shared_ProcessPoints(frame, node.points, node.parent);
-		if node.setAllPoints then frame:SetAllPoints(true); end
 
 		-- Backdrop
 		if node.backdrop then frame:SetBackdrop(node.backdrop); end
@@ -220,6 +232,7 @@ do
 
 	_M.Texture = function(frame, node)
 		assert(type(node) == "table", "Krutilities:Texture called with invalid constructor table.");
+		Shared_Mixin(node, node.mixin);
 
 		if not node.parent then
 			node.parent = frame ~= _M and frame or UIParent;
@@ -245,8 +258,8 @@ do
 			node.setAllPoints = true;
 		end
 		
-		Shared_ProcessPoints(tex, node.points, frame);
 		if node.setAllPoints then tex:SetAllPoints(true); end
+		Shared_ProcessPoints(tex, node.points, frame);
 
 		-- Colour filter
 		if node.color then
@@ -268,6 +281,7 @@ do
 
 	_M.Text = function(frame, node)
 		assert(type(node) == "table", "Krutilities:Text called with invalid constructor table.");
+		Shared_Mixin(node, node.mixin);
 
 		if not node.parent then
 			node.parent = frame ~= _M and frame or UIParent;
