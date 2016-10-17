@@ -19,14 +19,12 @@ end
 
 _M.HookTradeSkillFrame = function(self)
 	-- ToDo: Hook.
+	self:RemoveEventHandler("ADDON_LOADED");
 	self.isTradeSkillFrameHooked = true;
 end
 
 _M.OnLoad = function(self)
-	self:RemoveEventHandler("ADDON_LOADED");
-
 	-- ToDo: Add command to open interface.
-
 	if not self.isTradeSkillFrameHooked and IsAddOnLoaded("Blizzard_TradeSkillUI") then
 		self:HookTradeSkillFrame();
 	end

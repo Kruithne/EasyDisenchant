@@ -1,0 +1,22 @@
+[1mdiff --git a/EasyDisenchant.lua b/EasyDisenchant.lua[m
+[1mindex 4e6c1c9..e5060a0 100644[m
+[1m--- a/EasyDisenchant.lua[m
+[1m+++ b/EasyDisenchant.lua[m
+[36m@@ -19,14 +19,12 @@[m [mend[m
+ [m
+ _M.HookTradeSkillFrame = function(self)[m
+ 	-- ToDo: Hook.[m
+[32m+[m	[32mself:RemoveEventHandler("ADDON_LOADED");[m
+ 	self.isTradeSkillFrameHooked = true;[m
+ end[m
+ [m
+ _M.OnLoad = function(self)[m
+[31m-	self:RemoveEventHandler("ADDON_LOADED");[m
+[31m-[m
+ 	-- ToDo: Add command to open interface.[m
+[31m-[m
+ 	if not self.isTradeSkillFrameHooked and IsAddOnLoaded("Blizzard_TradeSkillUI") then[m
+ 		self:HookTradeSkillFrame();[m
+ 	end[m
+warning: CRLF will be replaced by LF in EasyDisenchant.lua.
+The file will have its original line endings in your working directory.
