@@ -3,4 +3,5 @@
 ## Notes: Quality-of-life addon for disenchanting.
 ## Author: Kruithne
 ## Version: 1.0
+Krutilities.lua
 EasyDisenchant.lua

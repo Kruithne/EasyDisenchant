@@ -24,7 +24,9 @@ _M.HookTradeSkillFrame = function(self)
 end
 
 _M.OnLoad = function(self)
-	-- ToDo: Add command to open interface.
+	SLASH_DISENCHANT1 = "/disenchant";
+	SlashCmdList["DISENCHANT"] = _M.OnCommand;
+
 	if not self.isTradeSkillFrameHooked and IsAddOnLoaded("Blizzard_TradeSkillUI") then
 		self:HookTradeSkillFrame();
 	end
@@ -36,6 +38,10 @@ _M.OnEvent = function(self, event, ...)
 	if handler then
 		handler(_M, ...);
 	end
+end
+
+_M.OnCommand = function(text, editBox)
+	
 end
 
 _M.OnAddonLoaded = function(self, addonName)
