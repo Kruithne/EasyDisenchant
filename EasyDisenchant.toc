@@ -5,3 +5,5 @@
 ## Version: 1.0
 Krutilities.lua
 EasyDisenchant.lua
+
+## X-GitHub-Repo: Kruithne/EasyDisenchant
