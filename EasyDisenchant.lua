@@ -96,7 +96,7 @@ _M.UpdateItems = function(self)
 			local itemTexture, _, _, itemQuality, _, _, itemLink = GetContainerItemInfo(bagID, slotID);
 
 			-- Skip non-existant items or legendary+.
-			if itemLink ~= nil and (itemQuality ~= nil and itemQuality < 5) then
+			if itemLink ~= nil and (itemQuality ~= nil and itemQuality < 5 and itemQuality > 1) then
 				local itemName, _, _, _, _, itemClass, itemSubClass = GetItemInfo(itemLink);
 
 				-- Only disenchant weapons and armour.
