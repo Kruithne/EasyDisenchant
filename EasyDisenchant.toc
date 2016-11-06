@@ -7,4 +7,4 @@ Krutilities.lua
 EasyDisenchant.lua
 
 ## X-GitHub-Repo: Kruithne/EasyDisenchant
-## X-Curse-Project-ID: EasyDisenchant
+## X-Curse-Project-ID: easydisenchant
