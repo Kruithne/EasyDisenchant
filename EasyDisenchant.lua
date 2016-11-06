@@ -97,10 +97,10 @@ _M.UpdateItems = function(self)
 
 			-- Skip non-existant items or legendary+.
 			if itemLink ~= nil and (itemQuality ~= nil and itemQuality < 5) then
-				local itemName, _, _, _, _, itemClass = GetItemInfo(itemLink);
+				local itemName, _, _, _, _, itemClass, itemSubClass = GetItemInfo(itemLink);
 
 				-- Only disenchant weapons and armour.
-				if itemClass == WEAPON or itemClass == ARMOR then
+				if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
 					local button = buttons[useButton];
 
 					SetItemButtonTexture(button, itemTexture);
