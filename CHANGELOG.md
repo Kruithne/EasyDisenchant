@@ -1,3 +1,6 @@
+** Version 1.0.2 **
+* Prevent disenchant attempts in combat.
+
 ** Version 1.0.1 **
 * Remove poor and common items from the disenchant window.
 
