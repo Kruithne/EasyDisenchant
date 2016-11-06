@@ -88,7 +88,7 @@ _M.UpdateItems = function(self)
 	end
 
 	local disenchantName = GetSpellInfo(13262);
-	local macroFormat = "/stopcasting\n/cast %s\n/cast %s %s";
+	local macroFormat = "/stopmacro [combat]\n/stopcasting\n/cast %s\n/cast %s %s";
 
 	local useButton = 1;
 	for bagID = 0, NUM_BAG_SLOTS do
