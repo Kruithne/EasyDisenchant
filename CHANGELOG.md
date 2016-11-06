@@ -1,3 +1,6 @@
+** Version 1.0.3 **
+* Better display, optimized code, more shiny.
+
 ** Version 1.0.2 **
 * Prevent disenchant attempts in combat.
 
