@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="EASY_DISENCHANT_OPEN" runOnUp="true" header="EASY_DISENCHANT" default="CTRL-D">
+		EasyDisenchantShowWindow();
+	</Binding>
+</Bindings>

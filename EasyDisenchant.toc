@@ -5,6 +5,7 @@
 ## Version: 1.0.4
 Krutilities.lua
 EasyDisenchant.lua
+Bindings.xml
 
 ## X-GitHub-Repo: Kruithne/EasyDisenchant
 ## X-Curse-Project-ID: easydisenchant

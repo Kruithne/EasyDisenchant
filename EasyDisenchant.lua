@@ -14,6 +14,9 @@ local _M = {
 	buttonRenderingCache = {},
 };
 
+BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
+BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
+
 _M.SetEventHandler = function(self, event, func)
 	self.eventMap[event] = func;
 	self.eventFrame:RegisterEvent(event);
@@ -388,3 +391,6 @@ end
 
 _M.eventFrame:SetScript("OnEvent", _M.OnEvent);
 _M:SetEventHandler("ADDON_LOADED", _M.OnAddonLoaded);
+
+-- Global handle to open the window.
+EasyDisenchantShowWindow = _M.InvokeWindowOpen;
