@@ -357,7 +357,7 @@ end
 
 _M.OnLoad = function(self)
 	-- Register command.
-	SLASH_DISENCHANT1 = "/disenchant";
+	SLASH_DISENCHANT1, SLASH_DISENCHANT2 = "/disenchant", "/de";
 	SlashCmdList["DISENCHANT"] = self.InvokeWindowOpen;
 
 	-- Hook to TradeSkillFrame.

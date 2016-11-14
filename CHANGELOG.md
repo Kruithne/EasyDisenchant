@@ -1,3 +1,6 @@
+** Version 1.0.4 **
+* Added short-hand command "/de".
+
 ** Version 1.0.3 **
 * Better display, optimized code, more shiny.
 
