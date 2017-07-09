@@ -181,23 +181,26 @@ _M.UpdateItems = function(self)
 			if itemLink ~= nil and (itemQuality ~= nil and itemQuality < 5 and itemQuality > 1) then
 				local itemName, _, _, _, _, itemClass, itemSubClass = GetItemInfo(itemLink);
 
-				-- Only disenchant weapons and armour.
-				if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
-					local button = self:GetItemButton(useButton);
+				-- Avoid breaking on M+ keys
+                if(itemSubClass ~= nil) then 
+                    -- Only disenchant weapons and armour.
+                    if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
+                        local button = self:GetItemButton(useButton);
 
-					SetItemButtonTexture(button, itemTexture);
-					SetItemButtonQuality(button, itemQuality, itemLink);
+                        SetItemButtonTexture(button, itemTexture);
+                        SetItemButtonQuality(button, itemQuality, itemLink);
 
-					button:SetAttribute("macrotext", macroFormat:format(disenchantName, bagID, slotID));
-					button.link = itemLink;
-					button:Show();
+                        button:SetAttribute("macrotext", macroFormat:format(disenchantName, bagID, slotID));
+                        button.link = itemLink;
+                        button:Show();
 
-					if useButton == self.maxButtons then
-						return;
-					end
+                        if useButton == self.maxButtons then
+                            return;
+                        end
 
-					useButton = useButton + 1;
-				end
+                        useButton = useButton + 1;
+                    end
+                end
 			end
 		end
 	end
