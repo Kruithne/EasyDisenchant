@@ -1,3 +1,6 @@
+** Version 1.0.5 **
+* Fixed error relating to Mythic Keystones and other items.
+
 ** Version 1.0.4 **
 * Added short-hand command "/de".
 * Added key-binding to the Blizzard Key Binding system. Defaults to CTRL-D.

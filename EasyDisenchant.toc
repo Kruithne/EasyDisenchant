@@ -2,7 +2,7 @@
 ## Title: EasyDisenchant
 ## Notes: Quality-of-life addon for disenchanting.
 ## Author: Kruithne
-## Version: 1.0.4
+## Version: 1.0.5
 Krutilities.lua
 EasyDisenchant.lua
 Bindings.xml
