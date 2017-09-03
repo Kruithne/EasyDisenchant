@@ -7,5 +7,6 @@ Krutilities.lua
 EasyDisenchant.lua
 Bindings.xml
 
+## X-Contributors: MarkWisselink
 ## X-GitHub-Repo: Kruithne/EasyDisenchant
 ## X-Curse-Project-ID: easydisenchant
