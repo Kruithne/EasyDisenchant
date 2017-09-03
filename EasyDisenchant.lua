@@ -20,10 +20,8 @@ BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
 local IsBlacklisted = function(itemLink)
-    itemName,_,_,itemLevel,_ = GetItemInfo(itemLink);
     for i, BLitemLink in pairs(EasyDisenchantBlacklist) do
-        BLitemName,_,_,BLitemLevel,_ = GetItemInfo(BLitemLink);
-        if((itemName == BLitemName) and (itemLevel == BLitemLevel)) then
+        if(BLitemLink == itemLink) then
             return true;
         end
     end
