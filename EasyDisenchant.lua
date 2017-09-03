@@ -344,7 +344,7 @@ _M.CreateDisenchantFrame = function(self)
 			}
 		},
 		scripts = {
-			OnHide = function() PlaySound("UI_EtherealWindow_Close"); end
+			OnHide = function() PlaySound(SOUNDKIT.UI_ETHEREAL_WINDOW_CLOSE); end
 		}
 	});
 end
@@ -358,7 +358,7 @@ _M.OpenWindow = function(self)
 
 	self:UpdateItems();
 	self.disenchantFrame:Show();
-	PlaySound("UI_EtherealWindow_Open");
+	PlaySound(SOUNDKIT.UI_ETHEREAL_WINDOW_OPEN);
 end
 
 _M.OnLoad = function(self)
