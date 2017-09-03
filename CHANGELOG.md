@@ -1,3 +1,6 @@
+** Version 1.0.6 **
+* Fixed PlaySound issue introduced in 7.3 (MarkWisselink)
+
 ** Version 1.0.5 **
 * Fixed error relating to Mythic Keystones and other items.
 
