@@ -136,7 +136,7 @@ _M.GetItemButtonRenderingCache = function(self)
 				frame.header:SetTextColor(1, 0, 0);
 			else
                 if(key == "RightButton")then
-                    self:Blacklist(self.link);
+                    self:BlacklistItem(self.link);
                 end
 				self:Hide();
 			end
