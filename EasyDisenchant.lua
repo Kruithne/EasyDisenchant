@@ -230,7 +230,7 @@ _M.UpdateItems = function(self)
 				local itemName, _, _, _, _, itemClass, itemSubClass = GetItemInfo(itemLink);
 
 				-- Avoid breaking on M+ keys
-                if (itemSubClass ~= nil) then
+                if itemSubClass ~= nil then
                     -- Check Blacklist
                     if not self:IsBlacklisted(itemLink) then
                         -- Only disenchant weapons and armour.
