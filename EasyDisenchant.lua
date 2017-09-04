@@ -31,7 +31,7 @@ _M.IsBlacklisted = function(itemLink)
     return false;
 end
 
-_M.Blacklist = function(itemLink)
+_M.BlacklistItem = function(itemLink)
     if(EasyDisenchantBlacklist == {}) then
         nextindex = 0;
     else
