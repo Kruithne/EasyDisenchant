@@ -1,7 +1,6 @@
 -- [[ Globals ]] --
 local PlaySound = PlaySound;
 local HideUIPanel = HideUIPanel;
-local pairs = pairs;
 local table_remove = table.remove;
 local math_floor = math.floor;
 
@@ -23,11 +22,11 @@ BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
 _M.IsBlacklisted = function(itemLink)
-    for i, blacklistItem in pairs(EasyDisenchantBlacklist) do
-        if(blacklistItem == itemLink) then
-            return true;
-        end
-    end
+	for i = 1, #EasyDisenchantBlacklist do
+		if (EasyDisenchantBlacklist[i] == itemLink) then
+			return true;
+		end
+	end
     return false;
 end
 
