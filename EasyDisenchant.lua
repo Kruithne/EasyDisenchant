@@ -14,8 +14,42 @@ local _M = {
 	buttonRenderingCache = {},
 };
 
+EasyDisenchantBlacklist = {};
+
 BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
+
+local IsBlacklisted = function(itemLink)
+    for i, BLitemLink in pairs(EasyDisenchantBlacklist) do
+        if(BLitemLink == itemLink) then
+            return true;
+        end
+    end
+    return false;
+end
+
+local Blacklist = function(itemLink)
+    if(EasyDisenchantBlacklist == {}) then
+        nextindex = 0;
+    else
+        nextindex = #EasyDisenchantBlacklist+1;
+    end
+    EasyDisenchantBlacklist[nextindex] = itemLink;
+    print("EasyDisenchant: blacklisted "..itemLink);
+    print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
+end
+
+local ResetBlacklist = function()
+    EasyDisenchantBlacklist = {};
+    print("EasyDisenchant: the blacklist has been reset.");
+end
+
+local UndoBlacklist = function()
+    local item = table.remove(EasyDisenchantBlacklist, #EasyDisenchantBlacklist)
+    if(item ~= nil) then
+        print("EasyDisenchant: removed "..item.." from the blacklist");
+    end
+end
 
 _M.SetEventHandler = function(self, event, func)
 	self.eventMap[event] = func;
@@ -89,11 +123,14 @@ _M.GetItemButtonRenderingCache = function(self)
 		local frame = self.disenchantFrame;
 
 		-- Called when an item button is clicked, as a post-event.
-		cache.func_clickHook = function(self)
+		cache.func_clickHook = function(self, key)
 			if InCombatLockdown() then
 				frame.header:SetText(ERR_NOT_IN_COMBAT);
 				frame.header:SetTextColor(1, 0, 0);
 			else
+                if(key == "RightButton")then
+                    Blacklist(self.link);
+                end
 				self:Hide();
 			end
 		end
@@ -154,6 +191,7 @@ _M.GetItemButton = function(self, index)
 	local button = _K:Frame(cache.factory(index));
 
 	button:HookScript("OnClick", cache.func_clickHook);
+    button:RegisterForClicks("LeftButtonUp", "RightButtonUp");
 	button:SetAttribute("type", "macro");
 
 	buttons[#buttons + 1] = button;
@@ -170,7 +208,7 @@ _M.UpdateItems = function(self)
 	end
 
 	local disenchantName = GetSpellInfo(13262);
-	local macroFormat = "/stopmacro [combat]\n/stopcasting\n/cast %s\n/cast %s %s";
+	local macroFormat = "/stopmacro [combat][btn:2]\n/stopcasting\n/cast %s\n/cast %s %s";
 
 	local useButton = 0;
 	for bagID = 0, NUM_BAG_SLOTS do
@@ -183,22 +221,25 @@ _M.UpdateItems = function(self)
 
 				-- Avoid breaking on M+ keys
                 if(itemSubClass ~= nil) then 
-                    -- Only disenchant weapons and armour.
-                    if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
-                        local button = self:GetItemButton(useButton);
+                    -- Check Blacklist
+                    if(IsBlacklisted(itemLink) == false) then
+                        -- Only disenchant weapons and armour.
+                        if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
+                            local button = self:GetItemButton(useButton);
 
-                        SetItemButtonTexture(button, itemTexture);
-                        SetItemButtonQuality(button, itemQuality, itemLink);
+                            SetItemButtonTexture(button, itemTexture);
+                            SetItemButtonQuality(button, itemQuality, itemLink);
 
-                        button:SetAttribute("macrotext", macroFormat:format(disenchantName, bagID, slotID));
-                        button.link = itemLink;
-                        button:Show();
+                            button:SetAttribute("macrotext", macroFormat:format(disenchantName, bagID, slotID));
+                            button.link = itemLink;
+                            button:Show();
 
-                        if useButton == self.maxButtons then
-                            return;
+                            if useButton == self.maxButtons then
+                                return;
+                            end
+
+                            useButton = useButton + 1;
                         end
-
-                        useButton = useButton + 1;
                     end
                 end
 			end
@@ -364,7 +405,20 @@ end
 _M.OnLoad = function(self)
 	-- Register command.
 	SLASH_DISENCHANT1, SLASH_DISENCHANT2 = "/disenchant", "/de";
-	SlashCmdList["DISENCHANT"] = self.InvokeWindowOpen;
+	SlashCmdList["DISENCHANT"] = 
+    function(msg)
+        -- if command is /disenchant reset or /de reset; reset the blacklist.
+        if(strlower(msg) == "reset") then
+            ResetBlacklist();
+            return;
+        end
+        -- if command is /disenchant undo or /de undo; remove last item from blacklist
+        if(strlower(msg) == "undo") then
+            UndoBlacklist();
+            return;
+        end
+        self.InvokeWindowOpen();
+    end
 
 	-- Hook to TradeSkillFrame.
 	if not self.isTradeSkillFrameHooked and IsAddOnLoaded("Blizzard_TradeSkillUI") then
