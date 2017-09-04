@@ -19,7 +19,7 @@ do
 
 	local _K = Krutilities;
 	local _M = {
-		addonName = "EasyDisenchant",
+		ADDON_NAME = "EasyDisenchant",
 		chatFormat = "EasyDisenchant: %s",
 		eventFrame = CreateFrame("FRAME"),
 		itemButtons = {},
@@ -30,7 +30,7 @@ do
 		buttonRenderingCache = {},
 	};
 
-	BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
+	BINDING_HEADER_EASY_DISENCHANT = _M.ADDON_NAME;
 	BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
 	-- Set table __index call to pass-through strings.
@@ -346,7 +346,7 @@ do
 			texts = {
 				{
 					inherit = "GameFontHighlightMedium",
-					text = self.addonName,
+					text = self.ADDON_NAME,
 					injectSelf = "header",
 					points = { point = "TOPLEFT", x = 35, y = -40 }
 				},
@@ -492,7 +492,7 @@ do
 	end
 
 	_M.OnAddonLoaded = function(self, addonName)
-		if addonName == self.addonName then
+		if addonName == self.ADDON_NAME then
 			self:OnLoad();
 		elseif addonName == "Blizzard_TradeSkillUI" then
 			_M:HookTradeSkillFrame();
