@@ -28,17 +28,13 @@ _M.IsBlacklisted = function(self, itemID)
 	return self.blacklist[itemID];
 end
 
-_M.BlacklistItem = function(self, itemLink)
-	local itemID = self.GetItemIDFromLink(itemLink);
+_M.BlacklistItem = function(self, itemID, itemLink)
+	self.blacklist[itemID] = true;
+	self.lastBlacklistedItem = itemID;
+	self.lastBlacklistedItemLink = itemLink;
 
-	if itemID then
-		self.blacklist[itemID] = true;
-		self.lastBlacklistedItem = itemID;
-		self.lastBlacklistedItemLink = itemLink;
-
-		self:Print(itemLink .. " has been blacklisted.");
-		self:Print("Use the command /de undo to revert this, or /de reset to remove all blacklisted items.");
-	end
+	self:Print(itemLink .. " has been blacklisted.");
+	self:Print("Use the command /de undo to revert this, or /de reset to remove all blacklisted items.");
 end
 
 _M.ResetBlacklist = function(self)
@@ -138,7 +134,7 @@ _M.GetItemButtonRenderingCache = function(self)
 				frame.header:SetTextColor(1, 0, 0);
 			else
                 if(key == "RightButton")then
-                    _M:BlacklistItem(self.link);
+                    _M:BlacklistItem(self.itemID, self.link);
                 end
 				self:Hide();
 			end
@@ -242,6 +238,7 @@ _M.UpdateItems = function(self)
 
                             button:SetAttribute("macrotext", macroFormat:format(disenchantName, bagID, slotID));
                             button.link = itemLink;
+							button.itemID = itemID;
                             button:Show();
 
                             if useButton == self.maxButtons then
