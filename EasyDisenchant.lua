@@ -4,6 +4,7 @@ local HideUIPanel = HideUIPanel;
 local math_floor = math.floor;
 local string_find = string.find;
 local tonumber = tonumber;
+local strlower = strlower;
 
 local _K = Krutilities;
 local _M = {
