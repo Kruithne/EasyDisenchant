@@ -1,6 +1,9 @@
 -- [[ Globals ]] --
 local PlaySound = PlaySound;
 local HideUIPanel = HideUIPanel;
+local pairs = pairs;
+local table_remove = table.remove;
+local math_floor = math.floor;
 
 local _K = Krutilities;
 local _M = {
@@ -45,7 +48,7 @@ _M.ResetBlacklist = function()
 end
 
 _M.UndoBlacklist = function()
-    local item = table.remove(EasyDisenchantBlacklist, #EasyDisenchantBlacklist)
+    local item = table_remove(EasyDisenchantBlacklist, #EasyDisenchantBlacklist)
     if(item ~= nil) then
         print("EasyDisenchant: removed "..item.." from the blacklist");
     end
@@ -166,7 +169,7 @@ _M.GetItemButtonRenderingCache = function(self)
 				points = {
 					point = "TOPLEFT",
 					x = 38 + (38 * (index % 9)),
-					y = -73 + (math.floor(index / 9) * -38)
+					y = -73 + (math_floor(index / 9) * -38)
 				},
 				scripts = {
 					OnEnter = cache.func_mouseEnter,
