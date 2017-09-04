@@ -414,13 +414,15 @@ _M.OpenWindow = function(self)
 end
 
 _M.OnCommand = function(msg)
+	msg = strlower(msg);
+
 	-- if command is /disenchant reset or /de reset; reset the blacklist.
-	if(strlower(msg) == "reset") then
+	if(msg == "reset") then
 		_M:ResetBlacklist();
 		return;
 	end
 	-- if command is /disenchant undo or /de undo; remove last item from blacklist
-	if(strlower(msg) == "undo") then
+	if(msg == "undo") then
 		_M:UndoBlacklist();
 		return;
 	end
