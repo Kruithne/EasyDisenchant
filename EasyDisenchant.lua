@@ -42,6 +42,8 @@ do
 
 	_M.ResetBlacklist = function(self)
 		self.blacklist = {};
+		EasyDisenchantBlacklist = self.blacklist;
+
 		self:Print("Item blacklist has been reset.");
 		self.InvokeWindowOpen(); -- Refresh display.
 	end
