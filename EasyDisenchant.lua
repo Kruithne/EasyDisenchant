@@ -230,9 +230,9 @@ _M.UpdateItems = function(self)
 				local itemName, _, _, _, _, itemClass, itemSubClass = GetItemInfo(itemLink);
 
 				-- Avoid breaking on M+ keys
-                if(itemSubClass ~= nil) then 
+                if (itemSubClass ~= nil) then
                     -- Check Blacklist
-                    if(self:IsBlacklisted(itemLink) == false) then
+                    if (self:IsBlacklisted(itemLink) == false) then
                         -- Only disenchant weapons and armour.
                         if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
                             local button = self:GetItemButton(useButton);
