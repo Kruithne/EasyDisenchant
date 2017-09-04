@@ -413,23 +413,24 @@ _M.OpenWindow = function(self)
 	PlaySound(SOUNDKIT.UI_ETHEREAL_WINDOW_OPEN);
 end
 
+_M.OnCommand = function(msg)
+	-- if command is /disenchant reset or /de reset; reset the blacklist.
+	if(strlower(msg) == "reset") then
+		_M:ResetBlacklist();
+		return;
+	end
+	-- if command is /disenchant undo or /de undo; remove last item from blacklist
+	if(strlower(msg) == "undo") then
+		_M:UndoBlacklist();
+		return;
+	end
+	_M.InvokeWindowOpen();
+end
+
 _M.OnLoad = function(self)
 	-- Register command.
 	SLASH_DISENCHANT1, SLASH_DISENCHANT2 = "/disenchant", "/de";
-	SlashCmdList["DISENCHANT"] = 
-    function(msg)
-        -- if command is /disenchant reset or /de reset; reset the blacklist.
-        if(strlower(msg) == "reset") then
-            self:ResetBlacklist();
-            return;
-        end
-        -- if command is /disenchant undo or /de undo; remove last item from blacklist
-        if(strlower(msg) == "undo") then
-			self:UndoBlacklist();
-            return;
-        end
-        self.InvokeWindowOpen();
-    end
+	SlashCmdList["DISENCHANT"] = _M.OnCommand;
 
 	-- Created store blacklist table if it doesn't exist.
 	if not EasyDisenchantBlacklist then
