@@ -41,6 +41,7 @@ end
 _M.ResetBlacklist = function(self)
     self.blacklist = {};
 	self:Print("Item blacklist has been reset.");
+	self.InvokeWindowOpen(); -- Refresh display.
 end
 
 _M.UndoBlacklist = function(self)
@@ -50,6 +51,8 @@ _M.UndoBlacklist = function(self)
 
 		self.lastBlacklistedItem = nil;
 		self.lastBlacklistedItemLink = nil;
+
+		self.InvokeWindowOpen(); -- Refresh display.
 	end
 end
 
