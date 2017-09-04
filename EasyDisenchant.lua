@@ -24,9 +24,8 @@ _M.GetItemIDFromLink = function(itemLink)
 	return string_find(itemLink, "Hitem:(%d+)");
 end
 
-_M.IsBlacklisted = function(self, itemLink)
-	local itemID = self.GetItemIDFromLink(itemLink);
-	return itemID and self.blacklist[itemID];
+_M.IsBlacklisted = function(self, itemID)
+	return self.blacklist[itemID];
 end
 
 _M.BlacklistItem = function(self, itemLink)
@@ -232,7 +231,8 @@ _M.UpdateItems = function(self)
 				-- Avoid breaking on M+ keys
                 if itemSubClass ~= nil then
                     -- Check Blacklist
-                    if not self:IsBlacklisted(itemLink) then
+					local itemID = self:GetItemIDFromLink(itemLink);
+                    if not self:IsBlacklisted(itemID) then
                         -- Only disenchant weapons and armour.
                         if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
                             local button = self:GetItemButton(useButton);
