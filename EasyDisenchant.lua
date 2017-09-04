@@ -474,6 +474,6 @@ do
 	_M.eventFrame:SetScript("OnEvent", _M.OnEvent);
 	_M:SetEventHandler("ADDON_LOADED", _M.OnAddonLoaded);
 
-	-- Global handle to open the window.
-	EasyDisenchantShowWindow = _M.InvokeWindowOpen;
+	EasyDisenchantShowWindow = _M.InvokeWindowOpen; -- Expose window open function.
+	EasyDisenchant = _M; -- Expose addon container.
 end
