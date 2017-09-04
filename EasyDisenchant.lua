@@ -31,12 +31,7 @@ _M.IsBlacklisted = function(itemLink)
 end
 
 _M.BlacklistItem = function(itemLink)
-    if(EasyDisenchantBlacklist == {}) then
-        nextindex = 0;
-    else
-        nextindex = #EasyDisenchantBlacklist+1;
-    end
-    EasyDisenchantBlacklist[nextindex] = itemLink;
+	EasyDisenchantBlacklist[#EasyDisenchantBlacklist+1] = itemLink;
     print("EasyDisenchant: blacklisted "..itemLink);
     print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
 end
