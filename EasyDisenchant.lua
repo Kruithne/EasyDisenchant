@@ -1,3 +1,12 @@
+--[[
+	EasyDisenchant (C) Kruithne <kruithne@gmail.com>
+	Licensed under GNU General Public Licence version 3.
+
+	https://github.com/Kruithne/EasyDisenchant
+
+	EasyDisenchant.lua - Contains the core functionality of the addon.
+]]--
+
 do
 	-- [[ Globals ]] --
 	local PlaySound = PlaySound;
