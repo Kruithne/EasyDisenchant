@@ -19,7 +19,7 @@ EasyDisenchantBlacklist = {};
 BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
-local IsBlacklisted = function(itemLink)
+_M.IsBlacklisted = function(itemLink)
     for i, BLitemLink in pairs(EasyDisenchantBlacklist) do
         if(BLitemLink == itemLink) then
             return true;
@@ -28,7 +28,7 @@ local IsBlacklisted = function(itemLink)
     return false;
 end
 
-local Blacklist = function(itemLink)
+_M.Blacklist = function(itemLink)
     if(EasyDisenchantBlacklist == {}) then
         nextindex = 0;
     else
@@ -39,12 +39,12 @@ local Blacklist = function(itemLink)
     print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
 end
 
-local ResetBlacklist = function()
+_M.ResetBlacklist = function()
     EasyDisenchantBlacklist = {};
     print("EasyDisenchant: the blacklist has been reset.");
 end
 
-local UndoBlacklist = function()
+_M.UndoBlacklist = function()
     local item = table.remove(EasyDisenchantBlacklist, #EasyDisenchantBlacklist)
     if(item ~= nil) then
         print("EasyDisenchant: removed "..item.." from the blacklist");
@@ -129,7 +129,7 @@ _M.GetItemButtonRenderingCache = function(self)
 				frame.header:SetTextColor(1, 0, 0);
 			else
                 if(key == "RightButton")then
-                    Blacklist(self.link);
+                    self.Blacklist(self.link);
                 end
 				self:Hide();
 			end
@@ -222,7 +222,7 @@ _M.UpdateItems = function(self)
 				-- Avoid breaking on M+ keys
                 if(itemSubClass ~= nil) then 
                     -- Check Blacklist
-                    if(IsBlacklisted(itemLink) == false) then
+                    if(self.IsBlacklisted(itemLink) == false) then
                         -- Only disenchant weapons and armour.
                         if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
                             local button = self:GetItemButton(useButton);
@@ -409,12 +409,12 @@ _M.OnLoad = function(self)
     function(msg)
         -- if command is /disenchant reset or /de reset; reset the blacklist.
         if(strlower(msg) == "reset") then
-            ResetBlacklist();
+            self.ResetBlacklist();
             return;
         end
         -- if command is /disenchant undo or /de undo; remove last item from blacklist
         if(strlower(msg) == "undo") then
-            UndoBlacklist();
+			self.UndoBlacklist();
             return;
         end
         self.InvokeWindowOpen();
