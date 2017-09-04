@@ -34,7 +34,7 @@ do
 	BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
 	-- Set table __index call to pass-through strings.
-	setmetatable(_R, { __index = function(t, k) return t.Strings[k]; end });
+	setmetatable(_M, { __index = function(t, k) return t.Strings[k]; end });
 
 	_M.ApplyLocalization = function(self, locale)
 		local strings = self.Strings;
