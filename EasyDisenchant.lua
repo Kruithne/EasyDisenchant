@@ -23,6 +23,9 @@ do
 	BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 	BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
+	-- Set table __index call to pass-through strings.
+	setmetatable(_R, { __index = function(t, k) return t.Strings[k]; end });
+
 	_M.GetItemIDFromLink = function(itemLink)
 		return tonumber(string_find(itemLink, "Hitem:(%d+)"));
 	end
@@ -36,22 +39,22 @@ do
 		self.lastBlacklistedItem = itemID;
 		self.lastBlacklistedItemLink = itemLink;
 
-		self:Print(itemLink .. " has been blacklisted.");
-		self:Print("Use the command /de undo to revert this, or /de reset to remove all blacklisted items.");
+		self:Print(self.BLACKLIST_ADD_ITEM:format(itemLink));
+		self:Print(self.BLACKLIST_INFO);
 	end
 
 	_M.ResetBlacklist = function(self)
 		self.blacklist = {};
 		EasyDisenchantBlacklist = self.blacklist;
 
-		self:Print("Item blacklist has been reset.");
+		self:Print(self.BLACKLIST_RESET);
 		self.InvokeWindowOpen(); -- Refresh display.
 	end
 
 	_M.UndoBlacklist = function(self)
 		if self.lastBlacklistedItem and self:IsBlacklisted(self.lastBlacklistedItem) then
 			self.blacklist[self.lastBlacklistedItem] = nil;
-			self:Print("Removed " .. self.lastBlacklistedItemLink .. " from the blacklist.");
+			self:Print(self.BLACKLIST_REMOVE_ITEM:format(self.lastBlacklistedItemLink));
 
 			self.lastBlacklistedItem = nil;
 			self.lastBlacklistedItemLink = nil;
