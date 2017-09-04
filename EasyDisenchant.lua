@@ -420,17 +420,16 @@ do
 	_M.OnCommand = function(msg)
 		msg = strlower(msg);
 
-		-- if command is /disenchant reset or /de reset; reset the blacklist.
-		if(msg == "reset") then
+		if msg == "reset" then
+			-- Reset the entire blacklist.
 			_M:ResetBlacklist();
-			return;
-		end
-		-- if command is /disenchant undo or /de undo; remove last item from blacklist
-		if(msg == "undo") then
+		elseif msg == "undo" then
+			-- Revert last addition to the blacklist.
 			_M:UndoBlacklist();
-			return;
+		else
+			-- Everything else just opens the window.
+			_M:InvokeWindowOpen();
 		end
-		_M.InvokeWindowOpen();
 	end
 
 	_M.OnLoad = function(self)
