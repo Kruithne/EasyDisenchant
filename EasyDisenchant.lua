@@ -15,6 +15,7 @@ do
 	local string_find = string.find;
 	local tonumber = tonumber;
 	local strlower = strlower;
+	local pairs = pairs;
 
 	local _K = Krutilities;
 	local _M = {
@@ -34,6 +35,13 @@ do
 
 	-- Set table __index call to pass-through strings.
 	setmetatable(_R, { __index = function(t, k) return t.Strings[k]; end });
+
+	_M.ApplyLocalization = function(self, locale)
+		local strings = self.Strings;
+		for key, str in pairs(locale) do
+			strings[key] = str;
+		end
+	end
 
 	_M.GetItemIDFromLink = function(itemLink)
 		return tonumber(string_find(itemLink, "Hitem:(%d+)"));
