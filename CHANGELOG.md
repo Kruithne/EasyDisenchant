@@ -1,3 +1,7 @@
+** Version 1.1.0 **
+* Added localization system (translation contributions welcome on GitHub).
+* Added ability to blacklist items from showing.
+
 ** Version 1.0.6 **
 * Fixed PlaySound issue introduced in 7.3 (MarkWisselink)
 
