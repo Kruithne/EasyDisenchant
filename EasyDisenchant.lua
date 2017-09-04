@@ -16,8 +16,6 @@ local _M = {
 	buttonRenderingCache = {},
 };
 
-EasyDisenchantBlacklist = {};
-
 BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
@@ -27,14 +25,14 @@ end
 
 _M.IsBlacklisted = function(self, itemLink)
 	local itemID = self.GetItemIDFromLink(itemLink);
-	return itemID and EasyDisenchantBlacklist[itemID];
+	return itemID and self.blacklist[itemID];
 end
 
 _M.BlacklistItem = function(self, itemLink)
 	local itemID = self.GetItemIDFromLink(itemLink);
 
 	if itemID then
-		EasyDisenchantBlacklist[itemID] = true;
+		self.blacklist[itemID] = true;
 		self.lastBlacklistedItem = itemID;
 		self.lastBlacklistedItemLink = itemLink;
 
@@ -43,14 +41,14 @@ _M.BlacklistItem = function(self, itemLink)
 	end
 end
 
-_M.ResetBlacklist = function()
-    EasyDisenchantBlacklist = {};
+_M.ResetBlacklist = function(self)
+    self.blacklist = {};
     print("EasyDisenchant: the blacklist has been reset.");
 end
 
 _M.UndoBlacklist = function(self)
 	if self.lastBlacklistedItem and self:IsBlacklisted(self.lastBlacklistedItem) then
-		EasyDisenchantBlacklist[self.lastBlacklistedItem] = nil;
+		self.blacklist[self.lastBlacklistedItem] = nil;
 		print("EasyDisenchant: removed " .. self.lastBlacklistedItemLink .. " from the blacklist");
 
 		self.lastBlacklistedItem = nil;
@@ -426,6 +424,14 @@ _M.OnLoad = function(self)
         end
         self.InvokeWindowOpen();
     end
+
+	-- Created store blacklist table if it doesn't exist.
+	if not EasyDisenchantBlacklist then
+		EasyDisenchantBlacklist = {};
+	end
+
+	-- Store local reference to our stored table.
+	self.blacklist = EasyDisenchantBlacklist;
 
 	-- Hook to TradeSkillFrame.
 	if not self.isTradeSkillFrameHooked and IsAddOnLoaded("Blizzard_TradeSkillUI") then
