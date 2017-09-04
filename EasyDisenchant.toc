@@ -8,6 +8,14 @@ Krutilities.lua
 EasyDisenchant.lua
 Bindings.xml
 Localization/Strings.lua
+Localization/Strings_deDE.lua
+Localization/Strings_esES.lua
+Localization/Strings_itIT.lua
+Localization/Strings_koKR.lua
+Localization/Strings_ptBR.lua
+Localization/Strings_ruRU.lua
+Localization/Strings_zhCN.lua
+Localization/Strings_zhTW.lua
 
 ## X-Contributors: MarkWisselink
 ## X-GitHub-Repo: Kruithne/EasyDisenchant
