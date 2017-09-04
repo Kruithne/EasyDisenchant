@@ -1,8 +1,8 @@
 -- [[ Globals ]] --
 local PlaySound = PlaySound;
 local HideUIPanel = HideUIPanel;
-local table_remove = table.remove;
 local math_floor = math.floor;
+local string_find = string.find;
 
 local _K = Krutilities;
 local _M = {
@@ -21,19 +21,26 @@ EasyDisenchantBlacklist = {};
 BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
-_M.IsBlacklisted = function(itemLink)
-	for i = 1, #EasyDisenchantBlacklist do
-		if (EasyDisenchantBlacklist[i] == itemLink) then
-			return true;
-		end
-	end
-    return false;
+_M.GetItemIDFromLink = function(itemLink)
+	return string_find(itemLink, "Hitem:(%d+)");
 end
 
-_M.BlacklistItem = function(itemLink)
-	EasyDisenchantBlacklist[#EasyDisenchantBlacklist+1] = itemLink;
-    print("EasyDisenchant: blacklisted "..itemLink);
-    print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
+_M.IsBlacklisted = function(self, itemLink)
+	local itemID = self.GetItemIDFromLink(itemLink);
+	return itemID and EasyDisenchantBlacklist[itemID];
+end
+
+_M.BlacklistItem = function(self, itemLink)
+	local itemID = self.GetItemIDFromLink(itemLink);
+
+	if itemID then
+		EasyDisenchantBlacklist[itemID] = true;
+		self.lastBlacklistedItem = itemID;
+		self.lastBlacklistedItemLink = itemLink;
+
+		print("EasyDisenchant: blacklisted "..itemLink);
+		print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
+	end
 end
 
 _M.ResetBlacklist = function()
@@ -41,11 +48,14 @@ _M.ResetBlacklist = function()
     print("EasyDisenchant: the blacklist has been reset.");
 end
 
-_M.UndoBlacklist = function()
-    local item = table_remove(EasyDisenchantBlacklist, #EasyDisenchantBlacklist)
-    if(item ~= nil) then
-        print("EasyDisenchant: removed "..item.." from the blacklist");
-    end
+_M.UndoBlacklist = function(self)
+	if self.lastBlacklistedItem and self:IsBlacklisted(self.lastBlacklistedItem) then
+		EasyDisenchantBlacklist[self.lastBlacklistedItem] = nil;
+		print("EasyDisenchant: removed " .. self.lastBlacklistedItemLink .. " from the blacklist");
+
+		self.lastBlacklistedItem = nil;
+		self.lastBlacklistedItemLink = nil;
+	end
 end
 
 _M.SetEventHandler = function(self, event, func)
@@ -126,7 +136,7 @@ _M.GetItemButtonRenderingCache = function(self)
 				frame.header:SetTextColor(1, 0, 0);
 			else
                 if(key == "RightButton")then
-                    self.Blacklist(self.link);
+                    self:Blacklist(self.link);
                 end
 				self:Hide();
 			end
@@ -219,7 +229,7 @@ _M.UpdateItems = function(self)
 				-- Avoid breaking on M+ keys
                 if(itemSubClass ~= nil) then 
                     -- Check Blacklist
-                    if(self.IsBlacklisted(itemLink) == false) then
+                    if(self:IsBlacklisted(itemLink) == false) then
                         -- Only disenchant weapons and armour.
                         if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
                             local button = self:GetItemButton(useButton);
@@ -406,12 +416,12 @@ _M.OnLoad = function(self)
     function(msg)
         -- if command is /disenchant reset or /de reset; reset the blacklist.
         if(strlower(msg) == "reset") then
-            self.ResetBlacklist();
+            self:ResetBlacklist();
             return;
         end
         -- if command is /disenchant undo or /de undo; remove last item from blacklist
         if(strlower(msg) == "undo") then
-			self.UndoBlacklist();
+			self:UndoBlacklist();
             return;
         end
         self.InvokeWindowOpen();
