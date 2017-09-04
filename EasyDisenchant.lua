@@ -344,10 +344,18 @@ do
 				}
 			},
 			texts = {
-				inherit = "GameFontHighlightMedium",
-				text = "EasyDisenchant",
-				injectSelf = "header",
-				points = { point = "TOPLEFT", x = 35, y = -40 }
+				{
+					inherit = "GameFontHighlightMedium",
+					text = "EasyDisenchant",
+					injectSelf = "header",
+					points = { point = "TOPLEFT", x = 35, y = -40 }
+				},
+				{
+					inherit = "GameFontHighlightMedium",
+					text = self.INFO,
+					justifyH = "CENTER",
+					points = { point = "BOTTOM", y = 30 }
+				}
 			},
 			textures = {
 				{ -- Background.
