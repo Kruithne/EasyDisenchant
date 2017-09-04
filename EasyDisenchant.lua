@@ -3,6 +3,7 @@ local PlaySound = PlaySound;
 local HideUIPanel = HideUIPanel;
 local math_floor = math.floor;
 local string_find = string.find;
+local tonumber = tonumber;
 
 local _K = Krutilities;
 local _M = {
@@ -21,7 +22,7 @@ BINDING_HEADER_EASY_DISENCHANT = _M.addonName;
 BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
 
 _M.GetItemIDFromLink = function(itemLink)
-	return string_find(itemLink, "Hitem:(%d+)");
+	return tonumber(string_find(itemLink, "Hitem:(%d+)"));
 end
 
 _M.IsBlacklisted = function(self, itemID)
