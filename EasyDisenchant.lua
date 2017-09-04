@@ -7,6 +7,7 @@ local string_find = string.find;
 local _K = Krutilities;
 local _M = {
 	addonName = "EasyDisenchant",
+	chatFormat = "EasyDisenchant: %s",
 	eventFrame = CreateFrame("FRAME"),
 	itemButtons = {},
 	eventMap = {}, -- Used for internal mapping of events.
@@ -36,24 +37,28 @@ _M.BlacklistItem = function(self, itemLink)
 		self.lastBlacklistedItem = itemID;
 		self.lastBlacklistedItemLink = itemLink;
 
-		print("EasyDisenchant: blacklisted "..itemLink);
-		print("EasyDisenchant: to remove all items from the blacklist; type /de reset; to remove only this item, type /de undo.")
+		self:Print(itemLink .. " has been blacklisted.");
+		self:Print("Use the command /de undo to revert this, or /de reset to remove all blacklisted items.");
 	end
 end
 
 _M.ResetBlacklist = function(self)
     self.blacklist = {};
-    print("EasyDisenchant: the blacklist has been reset.");
+	self:Print("Item blacklist has been reset.");
 end
 
 _M.UndoBlacklist = function(self)
 	if self.lastBlacklistedItem and self:IsBlacklisted(self.lastBlacklistedItem) then
 		self.blacklist[self.lastBlacklistedItem] = nil;
-		print("EasyDisenchant: removed " .. self.lastBlacklistedItemLink .. " from the blacklist");
+		self:Print("Removed " .. self.lastBlacklistedItemLink .. " from the blacklist.");
 
 		self.lastBlacklistedItem = nil;
 		self.lastBlacklistedItemLink = nil;
 	end
+end
+
+_M.Print = function(self, message)
+	DEFAULT_CHAT_FRAME:AddMessage(self.chatFormat:format(message));
 end
 
 _M.SetEventHandler = function(self, event, func)
