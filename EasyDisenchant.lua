@@ -346,7 +346,7 @@ do
 			texts = {
 				{
 					inherit = "GameFontHighlightMedium",
-					text = "EasyDisenchant",
+					text = self.addonName,
 					injectSelf = "header",
 					points = { point = "TOPLEFT", x = 35, y = -40 }
 				},
