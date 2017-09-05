@@ -1,3 +1,6 @@
+** Version 1.1.1 **
+* Fixed an issue that prevented blacklisting from working as expected.
+
 ** Version 1.1.0 **
 * Added localization system (translation contributions welcome on GitHub).
 * Added ability to blacklist items from showing.
