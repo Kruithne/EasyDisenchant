@@ -12,7 +12,7 @@ do
 	local PlaySound = PlaySound;
 	local HideUIPanel = HideUIPanel;
 	local math_floor = math.floor;
-	local string_find = string.find;
+	local string_match = string.match;
 	local tonumber = tonumber;
 	local strlower = strlower;
 	local pairs = pairs;
@@ -44,7 +44,7 @@ do
 	end
 
 	_M.GetItemIDFromLink = function(itemLink)
-		return tonumber(string_find(itemLink, "Hitem:(%d+)"));
+		return tonumber(string_match(itemLink, "Hitem:(%d+)"));
 	end
 
 	_M.IsBlacklisted = function(self, itemID)
