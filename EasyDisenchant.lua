@@ -28,7 +28,14 @@ do
 		tradeSkillID = 333, -- CHARACTER_PROFESSION_ENCHANTING
 		maxButtons = 89,
 		buttonRenderingCache = {},
+		debug = false,
 	};
+
+	local function debug(key, ...)
+		if ViragDevTool_AddData and _M.Debug then 
+			ViragDevTool_AddData({...}, _M.ADDON_NAME ": "..key) 
+		end
+	end
 
 	BINDING_HEADER_EASY_DISENCHANT = _M.ADDON_NAME;
 	BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
@@ -231,6 +238,42 @@ do
 		return button;
 	end
 
+	_M.IsItemInOutfitt = function(self, bagID, slotID, itemID)
+		if Outfitter then
+			local inventoryCache = Outfitter:GetInventoryCache()
+
+			-- Call this method to mark items with UsedInOutfit
+			inventoryCache:CompiledUnusedItemsList()
+
+			local vItems = inventoryCache.ItemsByCode[itemID]
+			if vItems ~= nil then
+				for _, vItemInfo in ipairs(vItems) do
+					local bagIndex = vItemInfo.Location.BagIndex
+					local bagSlotIndex = vItemInfo.Location.BagSlotIndex
+					
+					debug("Checking item: " .. vItemInfo.Link)
+					debug("bagIndex:", bagID, bagIndex)
+					debug("bagSlotIndex:", slotID, bagSlotIndex)
+					debug("itemID:", itemID, vItemInfo.Code)
+					debug("", vItemInfo)
+					
+					if bagIndex == bagID and bagSlotIndex == slotID and vItemInfo.Code == itemID then
+						debug("Check UsedInOutfit", vItemInfo.UsedInOutfit)
+
+						-- We found our item now check if its used in an outfitt.
+						if vItemInfo.UsedInOutfit == true then
+							debug("This item is used in an outfitt! ignore it", vItemInfo.Link)
+							return true
+						end
+					end
+				end				
+			end
+		end
+
+		-- item is not in any outfitt
+		return false
+	end
+
 	_M.UpdateItems = function(self)
 		-- Hide buttons.
 		local buttons = _M.itemButtons;
@@ -256,7 +299,7 @@ do
 					if itemSubClass ~= nil then
 						-- Check Blacklist
 						local itemID = self.GetItemIDFromLink(itemLink);
-						if not self:IsBlacklisted(itemID) then
+						if not self:IsBlacklisted(itemID) and self:IsItemInOutfitt(bagID, slotID, itemID) == false then
 							-- Only disenchant weapons and armour.
 							if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
 								local button = self:GetItemButton(useButton);
