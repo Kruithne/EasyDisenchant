@@ -289,51 +289,56 @@ do
 	_M.IsItemInOutfit = function(self, bagID, slotID, itemID)
 		-- Check Outfitter if found
 		if Outfitter then
+			debug("Scanned Outfitter Outfits")
 			local inventoryCache = Outfitter:GetInventoryCache()
 
 			-- Call this method to mark items with UsedInOutfit
 			inventoryCache:CompiledUnusedItemsList()
 
+			debug("ItemsByCode:", inventoryCache.ItemsByCode)
 			local vItems = inventoryCache.ItemsByCode[itemID]
 			if vItems ~= nil then
 				for _, vItemInfo in ipairs(vItems) do
-					local bagIndex = vItemInfo.Location.BagIndex
-					local bagSlotIndex = vItemInfo.Location.BagSlotIndex
-					
+					--local bagIndex = vItemInfo.Location.BagIndex
+					--local bagSlotIndex = vItemInfo.Location.BagSlotIndex
+
 					debug("Checking item: " .. vItemInfo.Link)
-					debug("bagIndex:", bagID, bagIndex)
-					debug("bagSlotIndex:", slotID, bagSlotIndex)
+					-- debug("bagID:"..bagID)
+					-- debug("slotID:"..slotID)
+					-- debug("bagIndex:"..bagIndex)
+					-- debug("bagSlotIndex:"..bagSlotIndex)
 					debug("itemID:", itemID, vItemInfo.Code)
 					debug("", vItemInfo)
 					
-					if bagIndex == bagID and bagSlotIndex == slotID and vItemInfo.Code == itemID then
-						debug("Check UsedInOutfit", vItemInfo.UsedInOutfit)
+					-- outfitter can not differ 2 items with the same id... so we cant check with bag/slot index.
+					--if bagIndex == bagID and bagSlotIndex == slotID then
+					debug("Check UsedInOutfit", vItemInfo.UsedInOutfit)
 
-						-- We found our item now check if its used in an outfit.
-						if vItemInfo.UsedInOutfit == true then
-							debug("This item is used in an outfit! ignore it", vItemInfo.Link)
-							return true
-						end
+					-- We found our item now check if its used in an outfit.
+					if vItemInfo.UsedInOutfit == true then
+						debug("This item is used in an outfit! ignore it", vItemInfo.Link)
+						return true
 					end
+					--end
 				end
 			end
-		end
+		else
+			-- check blizzard equipment manager
+			local emOutfits = self:ScanEM()
+			debug("Scanned EM Outfits:", emOutfits)
 
-		-- check em
-		local emOutfits = self:ScanEM()
-		debug("Scanned EM Outfits:", emOutfits)
-
-		for outfitName, outfit in pairs(emOutfits) do
-			local item = outfit.Items[itemID]
-			if item ~= nil then
-				debug("Checking item: " .. item.Link)
-				debug("bagIndex:", bagID, item.Location.BagIndex)
-				debug("bagSlotIndex:", slotID, item.Location.BagSlotIndex)
-				debug("item:", item)
-				
-				if item.Location.BagIndex == bagID and item.Location.BagSlotIndex == slotID then
-					debug("This item is used in an outfit! ignore it", item.Link)
-					return true
+			for outfitName, outfit in pairs(emOutfits) do
+				local item = outfit.Items[itemID]
+				if item ~= nil then
+					debug("Checking item: " .. item.Link)
+					debug("bagIndex:", bagID, item.Location.BagIndex)
+					debug("bagSlotIndex:", slotID, item.Location.BagSlotIndex)
+					debug("item:", item)
+					
+					if item.Location.BagIndex == bagID and item.Location.BagSlotIndex == slotID then
+						debug("This item is used in an outfit! ignore it", item.Link)
+						return true
+					end
 				end
 			end
 		end
