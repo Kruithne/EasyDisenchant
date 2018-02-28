@@ -549,7 +549,7 @@ do
 				}
 			},
 			scripts = {
-				OnHide = function() PlaySound("UI_EtherealWindow_Close"); end
+				OnHide = function() PlaySound(SOUNDKIT.UI_ETHEREAL_WINDOW_CLOSE); end
 			}
 		});
 	end
@@ -563,7 +563,7 @@ do
 
 		self:UpdateItems();
 		self.disenchantFrame:Show();
-		PlaySound("UI_EtherealWindow_Close");
+		PlaySound(SOUNDKIT.UI_ETHEREAL_WINDOW_CLOSE);
 	end
 
 	_M.OnCommand = function(msg)
