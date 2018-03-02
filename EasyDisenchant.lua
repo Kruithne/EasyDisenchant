@@ -27,15 +27,8 @@ do
 		isTradeSkillFrameHooked = false,
 		tradeSkillID = 333, -- CHARACTER_PROFESSION_ENCHANTING
 		maxButtons = 89,
-		buttonRenderingCache = {},
-		debug = false,
+		buttonRenderingCache = {}
 	};
-
-	local function debug(key, ...)
-		if ViragDevTool_AddData and _M.debug then 
-			ViragDevTool_AddData({...}, _M.ADDON_NAME..": "..key) 
-		end
-	end
 
 	BINDING_HEADER_EASY_DISENCHANT = _M.ADDON_NAME;
 	BINDING_NAME_EASY_DISENCHANT_OPEN = SHOW;
@@ -243,7 +236,6 @@ do
 		local vNumEMOutfits = GetNumEquipmentSets();
 		local vOutfits = {};
 
-		debug("Equipment sets found:" .. vNumEMOutfits);
 		for vIndex = 1, vNumEMOutfits do
 			local outfitName = GetEquipmentSetInfo(vIndex);
 			local vOutfit = {
@@ -255,21 +247,14 @@ do
 			GetEquipmentSetLocations(outfitName, emLocations);
 			
 			for itemSlotType,itemID in pairs(itemIds) do
-				debug("itemID:" .. itemID);
-
 				local locationIndex = emLocations[itemSlotType];
-				debug("locationIndex:" .. locationIndex);
 				
 				-- only include items that exists in the bag.
 				local bags = (bit.band(locationIndex, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
 				if bags then
-					debug("unpacking slot type:" .. itemSlotType);
 					local _, _, _, _, pSlotIndex, pBagIndex = EquipmentManager_UnpackLocation(locationIndex);
-					debug("bag:" .. pBagIndex);
-					debug("slot:" .. pSlotIndex);
-					
 					local vItemLink = GetContainerItemLink(pBagIndex, pSlotIndex);
-					debug("vItemLink:", vItemLink);
+
 					if vItemLink then
 						local vItemInfo = {};
 						vItemInfo.Link = vItemLink;
@@ -278,8 +263,7 @@ do
 					end
 				end
 			end
-			
-			debug("inserting scanned outfit:", vOutfit);
+
 			vOutfits[outfitName] = vOutfit;
 		end
 
@@ -289,54 +273,28 @@ do
 	_M.IsItemInOutfit = function(self, bagID, slotID, itemID)
 		-- Check Outfitter if found
 		if Outfitter then
-			debug("Scanned Outfitter Outfits");
 			local inventoryCache = Outfitter:GetInventoryCache();
 
 			-- Call this method to mark items with UsedInOutfit
 			inventoryCache:CompiledUnusedItemsList();
 
-			debug("ItemsByCode:", inventoryCache.ItemsByCode);
 			local vItems = inventoryCache.ItemsByCode[itemID];
 			if vItems ~= nil then
 				for _, vItemInfo in ipairs(vItems) do
-					--local bagIndex = vItemInfo.Location.BagIndex
-					--local bagSlotIndex = vItemInfo.Location.BagSlotIndex
-
-					debug("Checking item: " .. vItemInfo.Link);
-					-- debug("bagID:"..bagID)
-					-- debug("slotID:"..slotID)
-					-- debug("bagIndex:"..bagIndex)
-					-- debug("bagSlotIndex:"..bagSlotIndex)
-					debug("itemID:", itemID, vItemInfo.Code);
-					debug("", vItemInfo);
-					
-					-- outfitter can not differ 2 items with the same id... so we cant check with bag/slot index.
-					--if bagIndex == bagID and bagSlotIndex == slotID then
-					debug("Check UsedInOutfit", vItemInfo.UsedInOutfit);
-
 					-- We found our item now check if its used in an outfit.
 					if vItemInfo.UsedInOutfit == true then
-						debug("This item is used in an outfit! ignore it", vItemInfo.Link);
 						return true
 					end
-					--end
 				end
 			end
 		else
 			-- check blizzard equipment manager
 			local emOutfits = self:ScanEM()
-			debug("Scanned EM Outfits:", emOutfits);
 
 			for outfitName, outfit in pairs(emOutfits) do
 				local item = outfit.Items[itemID];
 				if item ~= nil then
-					debug("Checking item: " .. item.Link);
-					debug("bagIndex:", bagID, item.Location.BagIndex);
-					debug("bagSlotIndex:", slotID, item.Location.BagSlotIndex);
-					debug("item:", item);
-					
 					if item.Location.BagIndex == bagID and item.Location.BagSlotIndex == slotID then
-						debug("This item is used in an outfit! ignore it", item.Link);
 						return true;
 					end
 				end
@@ -362,9 +320,7 @@ do
 
 		local useButton = 0;
 		for bagID = 0, NUM_BAG_SLOTS do
-			debug("Checking bag " .. bagID)
 			for slotID = 1, GetContainerNumSlots(bagID) do
-				debug("Checking slot " .. slotID);
 				local itemTexture, _, _, itemQuality, _, _, itemLink = GetContainerItemInfo(bagID, slotID);
 
 				-- Skip non-existant items or legendary+.
@@ -381,7 +337,6 @@ do
 							if itemClass == WEAPON or itemClass == ARMOR or itemSubClass:find(ITEM_QUALITY6_DESC) then
 								local button = self:GetItemButton(useButton);
 
-								debug("Adding: " .. itemLink);
 								SetItemButtonTexture(button, itemTexture);
 								SetItemButtonQuality(button, itemQuality, itemLink);
 
