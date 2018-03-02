@@ -231,7 +231,7 @@ do
 		return button;
 	end
 
-	local emLocations = {}; -- It is always a good idea to use a reusable array if calling GetEquipmentSetLocations multiple times.
+	local emLocations = {}; -- GetEquipmentSetLocations cache.
 	_M.ScanEM = function(self)
 		local vNumEMOutfits = GetNumEquipmentSets();
 		local vOutfits = {};
@@ -248,8 +248,8 @@ do
 			
 			for itemSlotType,itemID in pairs(itemIds) do
 				local locationIndex = emLocations[itemSlotType];
-				
-				-- only include items that exists in the bag.
+
+				-- Only include items that in inventory.
 				local bags = (bit.band(locationIndex, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
 				if bags then
 					local _, _, _, _, pSlotIndex, pBagIndex = EquipmentManager_UnpackLocation(locationIndex);
@@ -271,7 +271,7 @@ do
 	end
 
 	_M.IsItemInOutfit = function(self, bagID, slotID, itemID)
-		-- Check Outfitter if found
+		-- Check Outfitter if installed.
 		if Outfitter then
 			local inventoryCache = Outfitter:GetInventoryCache();
 
@@ -288,7 +288,7 @@ do
 				end
 			end
 		else
-			-- check blizzard equipment manager
+			-- Check the Blizzard equipment manager.
 			local emOutfits = self:ScanEM();
 			for outfitName, outfit in pairs(emOutfits) do
 				local item = outfit.Items[itemID];
