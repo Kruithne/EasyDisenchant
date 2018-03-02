@@ -2,7 +2,7 @@
 ## Title: EasyDisenchant
 ## Notes: Quality-of-life addon for disenchanting.
 ## Author: Kruithne
-## Version: 1.1.1
+## Version: 1.1.2
 ## SavedVariables:EasyDisenchantBlacklist
 Krutilities.lua
 EasyDisenchant.lua
@@ -17,6 +17,6 @@ Localization/Strings_ruRU.lua
 Localization/Strings_zhCN.lua
 Localization/Strings_zhTW.lua
 
-## X-Contributors: MarkWisselink
+## X-Contributors: MarkWisselink, robgha01
 ## X-GitHub-Repo: Kruithne/EasyDisenchant
 ## X-Curse-Project-ID: easydisenchant

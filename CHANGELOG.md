@@ -1,3 +1,6 @@
+** Version 1.1.2 **
+* Ignore items located in item sets (Blizzard/Outfitter) (robgha01).
+
 ** Version 1.1.1 **
 * Fixed an issue that prevented blacklisting from working as expected.
 
