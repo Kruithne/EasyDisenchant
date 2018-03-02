@@ -241,7 +241,7 @@ do
 			local vOutfit = {
 				Name = outfitName,
 				Items = {},
-			}
+			};
 
 			local itemIds = GetEquipmentSetItemIDs(outfitName);
 			GetEquipmentSetLocations(outfitName, emLocations);
@@ -289,8 +289,7 @@ do
 			end
 		else
 			-- check blizzard equipment manager
-			local emOutfits = self:ScanEM()
-
+			local emOutfits = self:ScanEM();
 			for outfitName, outfit in pairs(emOutfits) do
 				local item = outfit.Items[itemID];
 				if item ~= nil then
