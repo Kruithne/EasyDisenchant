@@ -253,13 +253,15 @@ do
 				local bags = (bit.band(locationIndex, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
 				if bags then
 					local _, _, _, _, pSlotIndex, pBagIndex = EquipmentManager_UnpackLocation(locationIndex);
-					local vItemLink = GetContainerItemLink(pBagIndex, pSlotIndex);
+					if pBagIndex ~= nil and pSlotIndex ~= nil then
+						local vItemLink = GetContainerItemLink(pBagIndex, pSlotIndex);
 
-					if vItemLink then
-						local vItemInfo = {};
-						vItemInfo.Link = vItemLink;
-						vItemInfo.Location = {BagIndex = pBagIndex, BagSlotIndex = pSlotIndex};
-						vOutfit.Items[itemID] = vItemInfo;
+						if vItemLink then
+							local vItemInfo = {};
+							vItemInfo.Link = vItemLink;
+							vItemInfo.Location = {BagIndex = pBagIndex, BagSlotIndex = pSlotIndex};
+							vOutfit.Items[itemID] = vItemInfo;
+						end
 					end
 				end
 			end
