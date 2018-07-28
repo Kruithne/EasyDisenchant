@@ -1,3 +1,6 @@
+** Version 1.1.4 **
+* Update to work with Battle for Azeroth.
+
 ** Version 1.1.2 **
 * Ignore items located in item sets (Blizzard/Outfitter) (robgha01).
 

@@ -231,45 +231,33 @@ do
 		return button;
 	end
 
-	local emLocations = {}; -- GetEquipmentSetLocations cache.
-	_M.ScanEM = function(self)
-		local vNumEMOutfits = GetNumEquipmentSets();
-		local vOutfits = {};
+	_M.ScanEquipmentManager = function(self)
+		local numOutfits = C_EquipmentSet.GetNumEquipmentSets();
+		local equipmentCache = {};
 
-		for vIndex = 1, vNumEMOutfits do
-			local outfitName = GetEquipmentSetInfo(vIndex);
-			local vOutfit = {
-				Name = outfitName,
-				Items = {},
-			};
+		-- Equipment sets appear to be zero-index since 8.0?
+		for index = 0, numOutfits - 1 do
+			local _, _, setID = C_EquipmentSet.GetEquipmentSetInfo(index);
 
-			local itemIds = GetEquipmentSetItemIDs(outfitName);
-			GetEquipmentSetLocations(outfitName, emLocations);
-			
-			for itemSlotType,itemID in pairs(itemIds) do
-				local locationIndex = emLocations[itemSlotType];
+			local itemLocations = C_EquipmentSet.GetItemLocations(setID);
+			for slotIndex, itemLocation in pairs(itemLocations) do
+				local isInBags = (bit.band(itemLocation, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
+				if isInBags then
+					local _, _, _, _, itemSlotIndex, itemBagIndex = EquipmentManager_UnpackLocation(itemLocation);
 
-				-- Only include items that in inventory.
-				local bags = (bit.band(locationIndex, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
-				if bags then
-					local _, _, _, _, pSlotIndex, pBagIndex = EquipmentManager_UnpackLocation(locationIndex);
-					if pBagIndex ~= nil and pSlotIndex ~= nil then
-						local vItemLink = GetContainerItemLink(pBagIndex, pSlotIndex);
-
-						if vItemLink then
-							local vItemInfo = {};
-							vItemInfo.Link = vItemLink;
-							vItemInfo.Location = {BagIndex = pBagIndex, BagSlotIndex = pSlotIndex};
-							vOutfit.Items[itemID] = vItemInfo;
-						end
+					if itemSlotIndex ~= nil and itemBagIndex ~= nil then
+						local itemID = GetContainerItemID(itemBagIndex, itemSlotIndex);
+						equipmentCache[table.concat({itemBagIndex, itemSlotIndex, itemID}, "-")] = true;
 					end
 				end
 			end
-
-			vOutfits[outfitName] = vOutfit;
 		end
 
-		return vOutfits;
+		self.equipmentCache = equipmentCache;
+	end
+
+	_M.ResetEquipmentManagerCache = function(self)
+		self.equipmentCache = nil;
 	end
 
 	_M.IsItemInOutfit = function(self, bagID, slotID, itemID)
@@ -290,19 +278,14 @@ do
 				end
 			end
 		else
-			-- Check the Blizzard equipment manager.
-			local emOutfits = self:ScanEM();
-			for outfitName, outfit in pairs(emOutfits) do
-				local item = outfit.Items[itemID];
-				if item ~= nil then
-					if item.Location.BagIndex == bagID and item.Location.BagSlotIndex == slotID then
-						return true;
-					end
-				end
+			if self.equipmentCache == nil then
+				-- Only process outfit data once per window open.
+				self:ScanEquipmentManager();
 			end
+
+			return self.equipmentCache[table.concat({bagID, slotID, itemID}, "-")] or false;
 		end
 
-		-- item is not in any outfit
 		return false;
 	end
 
@@ -318,6 +301,8 @@ do
 
 		local disenchantName = GetSpellInfo(13262);
 		local macroFormat = "/stopmacro [combat][btn:2]\n/stopcasting\n/cast %s\n/cast %s %s";
+
+		self:ResetEquipmentManagerCache();
 
 		local useButton = 0;
 		for bagID = 0, NUM_BAG_SLOTS do

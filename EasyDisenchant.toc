@@ -1,8 +1,8 @@
-## Interface: 70300
+## Interface: 80000
 ## Title: EasyDisenchant
 ## Notes: Quality-of-life addon for disenchanting.
 ## Author: Kruithne
-## Version: 1.1.3
+## Version: 1.1.4
 ## SavedVariables:EasyDisenchantBlacklist
 Krutilities.lua
 EasyDisenchant.lua
