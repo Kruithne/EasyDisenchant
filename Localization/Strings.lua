@@ -13,4 +13,5 @@ EasyDisenchant.Strings = {
 	["BLACKLIST_RESET"] = "Item blacklist has been reset!",
 	["BLACKLIST_REMOVE_ITEM"] = "Removed %s from the blacklist.",
 	["INFO"] = "Left-click to disenchant, right-click to blacklist.",
+	["BROKEN_ITEM_SET"] = "Your item set '%s' is broken, delete and re-create it."
 };

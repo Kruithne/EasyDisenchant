@@ -237,19 +237,23 @@ do
 
 		-- Equipment sets appear to be zero-index since 8.0?
 		for index = 0, numOutfits - 1 do
-			local _, _, setID = C_EquipmentSet.GetEquipmentSetInfo(index);
+			local name, _, setID = C_EquipmentSet.GetEquipmentSetInfo(index);
 
-			local itemLocations = C_EquipmentSet.GetItemLocations(setID);
-			for slotIndex, itemLocation in pairs(itemLocations) do
-				local isInBags = (bit.band(itemLocation, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
-				if isInBags then
-					local _, _, _, _, itemSlotIndex, itemBagIndex = EquipmentManager_UnpackLocation(itemLocation);
+			if setID ~= nil then
+				local itemLocations = C_EquipmentSet.GetItemLocations(setID);
+				for slotIndex, itemLocation in pairs(itemLocations) do
+					local isInBags = (bit.band(itemLocation, ITEM_INVENTORY_LOCATION_BAGS) ~= 0);
+					if isInBags then
+						local _, _, _, _, itemSlotIndex, itemBagIndex = EquipmentManager_UnpackLocation(itemLocation);
 
-					if itemSlotIndex ~= nil and itemBagIndex ~= nil then
-						local itemID = GetContainerItemID(itemBagIndex, itemSlotIndex);
-						equipmentCache[table.concat({itemBagIndex, itemSlotIndex, itemID}, "-")] = true;
+						if itemSlotIndex ~= nil and itemBagIndex ~= nil then
+							local itemID = GetContainerItemID(itemBagIndex, itemSlotIndex);
+							equipmentCache[table.concat({itemBagIndex, itemSlotIndex, itemID}, "-")] = true;
+						end
 					end
 				end
+			else
+				self:Print(self.BROKEN_ITEM_SET:format(name));
 			end
 		end
 

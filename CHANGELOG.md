@@ -1,3 +1,9 @@
+** Version 1.1.6 **
+* Move broken item set string to the localization tables.
+
+** Version 1.1.5 **
+* Added band-aid to prevent broken item sets from breaking the add-on.
+
 ** Version 1.1.4 **
 * Update to work with Battle for Azeroth.
 
