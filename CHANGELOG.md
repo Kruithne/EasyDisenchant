@@ -1,3 +1,6 @@
+** Version 1.1.7 **
+* Fix issue with no-named item sets causing error messages.
+
 ** Version 1.1.6 **
 * Move broken item set string to the localization tables.
 

@@ -237,7 +237,7 @@ do
 
 		-- Equipment sets appear to be zero-index since 8.0?
 		for index = 0, numOutfits - 1 do
-			local name, _, setID = C_EquipmentSet.GetEquipmentSetInfo(index);
+			local _, _, setID = C_EquipmentSet.GetEquipmentSetInfo(index);
 
 			if setID ~= nil then
 				local itemLocations = C_EquipmentSet.GetItemLocations(setID);
@@ -253,7 +253,7 @@ do
 					end
 				end
 			else
-				self:Print(self.BROKEN_ITEM_SET:format(name));
+				self:Print(self.BROKEN_ITEM_SET);
 			end
 		end
 
