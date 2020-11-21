@@ -187,7 +187,10 @@ do
 		Shared_ProcessPoints(frame, node.points, node.parent);
 
 		-- Backdrop
-		if node.backdrop then frame:SetBackdrop(node.backdrop); end
+		if node.backdrop then
+			Mixin(node.backdrop, BackdropTemplateMixin)
+			frame:SetBackdrop(node.backdrop);
+		end
 
 		-- Data
 		if node.data then

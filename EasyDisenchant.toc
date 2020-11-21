@@ -1,4 +1,4 @@
-## Interface: 80000
+## Interface: 90002
 ## Title: EasyDisenchant
 ## Notes: Quality-of-life addon for disenchanting.
 ## Author: Kruithne
