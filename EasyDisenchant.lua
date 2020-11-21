@@ -186,9 +186,11 @@ do
 
 			cache.factory = function(index)
 				return {
+					--type = "BUTTON",
 					type = "ItemButton",
 					parent = self.disenchantFrame,
 					parentName = "ItemButton" .. index,
+					--inherit = "ItemButtonTemplate,SecureActionButtonTemplate",
 					inherit = "SecureActionButtonTemplate",
 					textures = {
 						injectSelf = "backdrop",
